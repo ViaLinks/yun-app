@@ -15,9 +15,9 @@
   "homepage": "https://github.com/walfud/yun-app#readme",
   "scripts": {
     "run:android": "echo TODO: @ushuaia",
-    "build:dev": "webpack --config -mode development",
-    "build": "webpack --config --mode production",
-    "clean": "rm -rf ./package/popup.js ./package/popup.js.map"
+    "build:dev": "webpack --mode development",
+    "build": "npm run clean && webpack --mode production",
+    "clean": "rm -rf ./build/"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",

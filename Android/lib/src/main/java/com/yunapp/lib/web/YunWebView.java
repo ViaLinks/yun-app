@@ -2,8 +2,10 @@ package com.yunapp.lib.web;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import com.yunapp.lib.config.YunLibConfig;
 
@@ -44,6 +46,9 @@ public class YunWebView extends WebView {
         webSetting.setUserAgentString(String.format("%s YunApp(version/%s)", ua, YunLibConfig.VERSION));
         setVerticalScrollBarEnabled(false);
         setHorizontalScrollBarEnabled(false);
+
+        setWebViewClient(new WebViewClient());
+        setWebChromeClient(new WebChromeClient());
     }
 
     private void removeJavaInterface() {
@@ -58,4 +63,8 @@ public class YunWebView extends WebView {
             e.printStackTrace();
         }
     }
+
+//    public void setJsHandler(IBridgeHandler handler) {
+//        addJavascriptInterface(new JSInterface(handler), "HeraJSCore");
+//    }
 }

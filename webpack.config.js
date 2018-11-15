@@ -5,12 +5,12 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ZipPlugin = require('zip-webpack-plugin')
 
 module.exports = {
+    mode: 'production',
     entry: path.join(__dirname, 'src', 'main.js'),
     output: {
         path: path.join(__dirname, 'build'),
         filename: 'bundle.js',
     },
-    devtool: 'source-map',
     module: {
         rules: [
             {
@@ -62,9 +62,4 @@ module.exports = {
             ],
         }),
     ],
-    resolve: {
-        alias: {
-            'vue': 'vue/dist/vue.js'
-        }
-    },
 }

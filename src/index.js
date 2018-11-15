@@ -1,3 +1,3 @@
 document.getElementById('btn').onclick = function(event) {
-    NativeAPI.showToast('toast from js', Toast.LENGTH_SHORT)
+    NativeAPI.showToast('toast from js')
 }

@@ -19,7 +19,7 @@ public class AppContainer extends LinearLayout {
         super(context);
         this.appId = appId;
         mYunWebView = new YunWebView(context);
-        mYunWebView.addJavascriptInterface(new JsHandler(), "yunAppJsCore");
+        mYunWebView.addJavascriptInterface(new JsHandler(), "NativeAPI");
         addView(mYunWebView, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
     }
 
@@ -29,13 +29,6 @@ public class AppContainer extends LinearLayout {
         File serviceFile = new File(StorageUtil.getMiniAppSourceDir(getContext(), appId), "index.html");
         String servicePath = FileUtil.toUriString(serviceFile);
         mYunWebView.loadUrl(servicePath);
-        //
-        postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mYunWebView.evaluateJavascript("javascript:(document.getElementById('btn').onclick = function(){yunAppJsCore.clickBtn()})();", null);
-            }
-        },3000);
     }
 
     @Override
@@ -47,11 +40,11 @@ public class AppContainer extends LinearLayout {
 
     class JsHandler {
         @JavascriptInterface
-        public void clickBtn() {
+        public void showToast(final String text) {
             post(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(getContext(), "HelloWord", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
                 }
             });
         }

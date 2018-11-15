@@ -1,10 +1,11 @@
 const path = require('path')
 
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ZipPlugin = require('zip-webpack-plugin')
 
 module.exports = {
-    entry: path.join(__dirname, 'src', 'index.js'),
+    entry: path.join(__dirname, 'src', 'main.js'),
     output: {
         path: path.join(__dirname, 'build'),
         filename: 'bundle.js',
@@ -13,7 +14,11 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.jsx?$/,
+                test: /\.vue$/,
+                use: 'vue-loader',
+            },
+            {
+                test: /\.js$/,
                 exclude: /node_modules/,
                 use: {
                     loader: 'babel-loader',
@@ -27,23 +32,39 @@ module.exports = {
                                     }
                                 }
                             ],
-                            "@babel/preset-react"
                         ],
-                        plugins: ['@babel/plugin-proposal-class-properties', '@babel/plugin-proposal-object-rest-spread'],
+                        plugins: [
+                            '@babel/plugin-proposal-class-properties',
+                            '@babel/plugin-proposal-object-rest-spread',
+                        ],
                     }
                 }
-            }
+            },
+            {
+                test: /\.css$/,
+                use: [
+                    'vue-style-loader',
+                    'css-loader'
+                ]
+            },
         ]
     },
     plugins: [
+        new VueLoaderPlugin(),
         new HtmlWebpackPlugin({
             template: './src/index.html',
+            inject: true,
         }),
         new ZipPlugin({
             filename: 'app.zip',
             exclude: [
-                /\.map$/, 
+                /\.map$/,
             ],
-          }),
-    ]
+        }),
+    ],
+    resolve: {
+        alias: {
+            'vue': 'vue/dist/vue.js'
+        }
+    },
 }

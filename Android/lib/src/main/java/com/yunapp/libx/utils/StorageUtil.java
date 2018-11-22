@@ -6,39 +6,22 @@ import java.io.File;
 
 public class StorageUtil {
 
-    private static final String BASE = "yunApp";
+    private static final String BASE = "yun-app";
 
-    public static File getBaseDir(Context context) {
-        File heraDir = new File(context.getFilesDir(), BASE);
-        if (!heraDir.exists() || !heraDir.isDirectory()) {
-            heraDir.mkdirs();
+    private static File getBaseDir(Context context) {
+        File dir = new File(context.getFilesDir(), BASE);
+        if (!dir.exists() || !dir.isDirectory()) {
+            dir.mkdirs();
         }
-        return heraDir;
+        return dir;
     }
 
-    public static File getAppDir(Context context) {
-        File heraAppDir = new File(getBaseDir(context), "app");
-        if (!heraAppDir.exists() || !heraAppDir.isDirectory()) {
-            heraAppDir.mkdirs();
+    public static File getSubDir(Context context, String subPath) {
+        File dir = new File(StorageUtil.getBaseDir(context), subPath);
+        if (!dir.exists() || !dir.isDirectory()) {
+            dir.mkdirs();
         }
-        return heraAppDir;
+        return dir;
     }
-
-    public static File getMiniAppDir(Context context, String appId) {
-        File miniAppDir = new File(getAppDir(context), appId);
-        if (!miniAppDir.exists() || !miniAppDir.isDirectory()) {
-            miniAppDir.mkdirs();
-        }
-        return miniAppDir;
-    }
-
-    public static File getMiniAppSourceDir(Context context, String appId) {
-        File miniAppSourceDir = new File(getMiniAppDir(context, appId), "source");
-        if (!miniAppSourceDir.exists() || !miniAppSourceDir.isDirectory()) {
-            miniAppSourceDir.mkdirs();
-        }
-        return miniAppSourceDir;
-    }
-
 
 }

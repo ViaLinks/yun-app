@@ -8,7 +8,6 @@ import android.widget.FrameLayout;
 
 import com.yunapp.libx.page.PageManager;
 import com.yunapp.libx.utils.LogUtil;
-import com.yunapp.libx.utils.StorageUtil;
 import com.yunapp.libx.utils.ZipUtil;
 import com.yunapp.libx.webcore.WebCore;
 
@@ -54,7 +53,7 @@ public class YunApp implements AppListener {
                     yunApp.loadPageModule();
                 }
             }
-        }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, appConfig.appId, appConfig.getAppPath());
+        }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, appConfig);
         return yunApp;
     }
 
@@ -87,7 +86,7 @@ public class YunApp implements AppListener {
         void onResult(boolean result);
     }
 
-    private static class LoadTask extends AsyncTask<String, Void, Boolean> {
+    private static class LoadTask extends AsyncTask<AppConfig, Void, Boolean> {
 
         private Context mContext;
         private LoadCallback mCallback;
@@ -103,20 +102,20 @@ public class YunApp implements AppListener {
         }
 
         @Override
-        protected Boolean doInBackground(String... params) {
-            if (params == null || params.length < 2) {
+        protected Boolean doInBackground(AppConfig... params) {
+            if (params == null || params.length != 1) {
                 return false;
             }
-            String appId = params[0];
-            String appPath = params[1];
-            String outputPath = StorageUtil.getMiniAppSourceDir(mContext, appId).getAbsolutePath();
+            AppConfig appConfig = params[0];
+            String zipFilePath = appConfig.getZipFile().getAbsolutePath();
+            String outputPath = appConfig.getAppSourceDir().getAbsolutePath();
             boolean unzipResult = false;
-            if (!TextUtils.isEmpty(appPath)) {
-                unzipResult = ZipUtil.unzipFile(appPath, outputPath);
+            if (!TextUtils.isEmpty(zipFilePath)) {
+                unzipResult = ZipUtil.unzipFile(zipFilePath, outputPath);
             }
             if (!unzipResult) {
                 try {
-                    InputStream in = mContext.getAssets().open(appId + ".zip");
+                    InputStream in = mContext.getAssets().open(appConfig.appId + ".zip");
                     unzipResult = ZipUtil.unzipFile(in, outputPath);
                 } catch (IOException e) {
                     LogUtil.e(e);

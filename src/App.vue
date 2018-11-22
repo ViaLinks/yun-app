@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-     <button @click="toast">Show Native Toast</button>
+    
   </div>
 </template>
 
@@ -8,12 +8,8 @@
 export default {
   name: "App",
   methods: {
-    toast: function() {
-      const { Toast } = NativeAPI
-      Toast.show('Hello Yun App', Toast.LENGTH_SHORT)
-    }
   }
-};
+}
 </script>
 
 <style>

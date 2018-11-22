@@ -4,11 +4,13 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ZipPlugin = require('zip-webpack-plugin')
 
+const rootDir = path.join(__dirname, '..')
+
 module.exports = {
     mode: 'production',
-    entry: path.join(__dirname, 'src', 'main.js'),
+    entry: path.join(rootDir, 'src', 'main.js'),
     output: {
-        path: path.join(__dirname, 'build'),
+        path: path.join(rootDir, 'dist'),
         filename: 'bundle.js',
     },
     module: {
@@ -62,4 +64,10 @@ module.exports = {
             ],
         }),
     ],
+    resolve: {
+        extensions: ['.js', '.vue', '.json'],
+        alias: {
+            '@': path.join(rootDir, 'src'),
+        }
+    },
 }

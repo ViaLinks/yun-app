@@ -1,4 +1,4 @@
-package com.yunapp.lib.utils;
+package com.yunapp.libx.utils;
 
 import android.content.Context;
 

@@ -27,11 +27,11 @@
     "@babel/preset-env": "^7.1.6",
     "babel-loader": "^8.0.4",
     "css-loader": "^1.0.1",
+    "filemanager-webpack-plugin": "^2.0.5",
     "html-webpack-plugin": "^3.2.0",
     "webpack": "^4.25.1",
     "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.10",
-    "zip-webpack-plugin": "^3.0.0"
+    "webpack-dev-server": "^3.1.10"
   },
   "dependencies": {
     "vue": "^2.5.17",

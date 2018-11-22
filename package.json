@@ -15,10 +15,10 @@
   "homepage": "https://github.com/ViaLinks/yun-app#readme",
   "scripts": {
     "run:android": "echo TODO: @ushuaia",
-    "dev": "webpack-dev-server --config ./webpack.dev.config.js --progress",
-    "build:dev": "webpack --config ./webpack.dev.config.js",
-    "build": "npm run clean && webpack",
-    "clean": "rm -rf ./build/"
+    "dev": "webpack-dev-server --config ./build/webpack.dev.config.js --progress",
+    "build:dev": "webpack --config ./build/webpack.dev.config.js",
+    "build": "npm run clean && webpack --config ./build/webpack.dev.config.js",
+    "clean": "rm -rf ./dist/"
   },
   "devDependencies": {
     "@babel/core": "^7.1.6",
@@ -28,13 +28,14 @@
     "babel-loader": "^8.0.4",
     "css-loader": "^1.0.1",
     "html-webpack-plugin": "^3.2.0",
-    "vue": "^2.5.17",
-    "vue-loader": "^15.4.2",
-    "vue-template-compiler": "^2.5.17",
     "webpack": "^4.25.1",
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.10",
     "zip-webpack-plugin": "^3.0.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "vue": "^2.5.17",
+    "vue-loader": "^15.4.2",
+    "vue-template-compiler": "^2.5.17"
+  }
 }

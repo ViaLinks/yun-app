@@ -1,4 +1,4 @@
-package com.yunapp.lib.utils;
+package com.yunapp.libx.utils;
 
 import java.io.Closeable;
 import java.io.IOException;

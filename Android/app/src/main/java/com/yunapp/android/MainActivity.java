@@ -14,7 +14,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        AppConfig appConfig = new AppConfig("1", "");
+        AppConfig appConfig = new AppConfig("1");
 
         FrameLayout yunRoot = this.findViewById(R.id.yunAppRoot);
         YunApp.load(this, yunRoot, appConfig);

@@ -27,7 +27,7 @@ public class YunApp implements AppListener {
     private Context mContext;
 
     private FrameLayout mYunAppRoot = null;
-    private WebCore mAppContainer = null;
+    private WebCore mWebCore = null;
     private PageManager mPageManager = null;
 
     private YunApp(Context context, FrameLayout rootView, AppConfig appConfig) {
@@ -54,14 +54,14 @@ public class YunApp implements AppListener {
                     yunApp.loadPageModule();
                 }
             }
-        }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, appConfig.appId, appConfig.appPath);
+        }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, appConfig.appId, appConfig.getAppPath());
         return yunApp;
     }
 
     private void loadWebCore() {
         LogUtil.d("加载WebCore");
-        mAppContainer = new WebCore(mContext, mAppConfig, this);
-        mYunAppRoot.addView(mAppContainer, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+        mWebCore = new WebCore(mContext, mAppConfig, this);
+        mYunAppRoot.addView(mWebCore, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
     }
 
     private void loadPageModule() {
@@ -73,7 +73,7 @@ public class YunApp implements AppListener {
     @Override
     public void onAppReady() {
         LogUtil.d("WebCore加载成功，即将启动第一个页面");
-        mPageManager.createAndAddPage("", this);
+        mPageManager.launchEntryPage(this);
     }
 
     private static void checkMainThread() {

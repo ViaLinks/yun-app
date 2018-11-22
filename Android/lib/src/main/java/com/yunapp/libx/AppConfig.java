@@ -6,10 +6,16 @@ public class AppConfig {
     public static final boolean DEBUG = true;
 
     public String appId = "";
-    public String appPath = "";
 
-    public AppConfig(String id, String path) {
+    public AppConfig(String id) {
         appId = id;
-        appPath = path;
+    }
+
+    public String getAppPath() {
+        return "";
+    }
+
+    public String getHomePage() {
+        return null;
     }
 }

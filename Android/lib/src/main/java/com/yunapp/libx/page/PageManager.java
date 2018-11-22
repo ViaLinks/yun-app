@@ -18,12 +18,12 @@ public class PageManager {
 
     private Context mContext;
     private AppConfig mAppConfig;
-    private FrameLayout mContainer;
+    private FrameLayout mPageContainer;
 
     public PageManager(Context context, AppConfig appConfig) {
         mContext = context;
         mAppConfig = appConfig;
-        mContainer = new FrameLayout(context);
+        mPageContainer = new FrameLayout(context);
 
         DisplayMetrics dm = mContext.getResources().getDisplayMetrics();
         LayoutTransition transition = new LayoutTransition();
@@ -40,7 +40,7 @@ public class PageManager {
         transition.setDuration(LayoutTransition.DISAPPEARING, 300);
         transition.setDuration(LayoutTransition.CHANGE_APPEARING, 300);
         transition.setDuration(LayoutTransition.CHANGE_DISAPPEARING, 300);
-        mContainer.setLayoutTransition(transition);
+        mPageContainer.setLayoutTransition(transition);
     }
 
     private Animator getAppearingAnimation(int start) {
@@ -58,7 +58,7 @@ public class PageManager {
     }
 
     private void enableAnimation() {
-        LayoutTransition transition = mContainer.getLayoutTransition();
+        LayoutTransition transition = mPageContainer.getLayoutTransition();
         if (transition != null) {
             transition.enableTransitionType(LayoutTransition.APPEARING);
             transition.enableTransitionType(LayoutTransition.DISAPPEARING);
@@ -69,7 +69,7 @@ public class PageManager {
     }
 
     private void disableAnimation() {
-        LayoutTransition transition = mContainer.getLayoutTransition();
+        LayoutTransition transition = mPageContainer.getLayoutTransition();
         if (transition != null) {
             transition.disableTransitionType(LayoutTransition.APPEARING);
             transition.disableTransitionType(LayoutTransition.DISAPPEARING);
@@ -85,7 +85,7 @@ public class PageManager {
      * @return 页面容器
      */
     public FrameLayout getContainer() {
-        return mContainer;
+        return mPageContainer;
     }
 
     /**
@@ -94,7 +94,7 @@ public class PageManager {
      * @return 当前页面数
      */
     public int getPageCount() {
-        return mContainer.getChildCount();
+        return mPageContainer.getChildCount();
     }
 
     /**
@@ -103,11 +103,11 @@ public class PageManager {
      * @return 当前显示的页面
      */
     public Page getTopPage() {
-        int count = mContainer.getChildCount();
+        int count = mPageContainer.getChildCount();
         if (count <= 0) {
             return null;
         }
-        return (Page) mContainer.getChildAt(count - 1);
+        return (Page) mPageContainer.getChildAt(count - 1);
     }
 
     /**
@@ -117,26 +117,15 @@ public class PageManager {
      * @return 索引位置的页面
      */
     public Page getPageAt(int index) {
-        return (Page) mContainer.getChildAt(index);
+        return (Page) mPageContainer.getChildAt(index);
     }
 
-    /**
-     * 启动主页面（第一个页面）
-     *
-     * @param url      页面路径
-     * @param listener 页面触发的事件监听
-     */
-    public boolean launchHomePage(String url, AppListener listener) {
-        if (TextUtils.isEmpty(url)) {
-            return false;
-        }
-        mContainer.removeAllViews();
-        Page page = createAndAddPage(url, listener);
-        if (page != null) {
-//            page.onLaunchHome(url);
-            return true;
-        }
-        return false;
+
+    public void launchEntryPage(AppListener listener) {
+        String entryPagePath = mAppConfig.getHomePage();
+        //
+        mPageContainer.removeAllViews();
+        createAndAddPage(entryPagePath, listener);
     }
 
     /**
@@ -149,7 +138,7 @@ public class PageManager {
     public Page createAndAddPage(String url, AppListener listener) {
         if (isTabPage(url)) {
             disableAnimation();
-            mContainer.removeAllViews();
+            mPageContainer.removeAllViews();
         } else {
             int pageCount = getPageCount();
             if (pageCount >= MAX_COUNT) {
@@ -164,7 +153,7 @@ public class PageManager {
         }
         Page page = new Page(mContext, url, mAppConfig);
         page.setAppListener(listener);
-        mContainer.addView(page, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+        mPageContainer.addView(page, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
         return page;
     }
 

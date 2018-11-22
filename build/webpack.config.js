@@ -2,15 +2,20 @@ const path = require('path')
 
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const ZipPlugin = require('zip-webpack-plugin')
+const FileManagerPlugin = require('filemanager-webpack-plugin')
+
+const app = require('../app.json')
 
 const rootDir = path.join(__dirname, '..')
+const srcDir = path.join(rootDir, 'src')
+const distDir = path.join(rootDir, 'dist')
+const targetZip = path.join(distDir, `${app.appId}.zip`)
 
 module.exports = {
     mode: 'production',
-    entry: path.join(rootDir, 'src', 'main.js'),
+    entry: path.join(srcDir, 'main.js'),
     output: {
-        path: path.join(rootDir, 'dist'),
+        path: distDir,
         filename: 'bundle.js',
     },
     module: {
@@ -57,17 +62,35 @@ module.exports = {
             template: './src/index.html',
             inject: true,
         }),
-        new ZipPlugin({
-            filename: 'app.zip',
-            exclude: [
-                /\.map$/,
+        new FileManagerPlugin({
+            onStart: [
+                {
+                    delete: [
+                        path.join(distDir, '/*'),
+                    ],
+                },
+            ],
+            onEnd: [
+                {
+                    mkdir: [
+                        distDir,
+                    ],
+                },
+                {
+                    copy: [
+                        { source: path.join(rootDir, 'app.json'), destination: distDir, },
+                    ],
+                    archive: [
+                        { source: path.join(distDir), destination: targetZip, },
+                    ],
+                },
             ],
         }),
     ],
     resolve: {
         extensions: ['.js', '.vue', '.json'],
         alias: {
-            '@': path.join(rootDir, 'src'),
+            '@': srcDir,
         }
     },
 }

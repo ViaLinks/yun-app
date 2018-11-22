@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.widget.FrameLayout;
 
 import com.yunapp.libx.page.PageManager;
+import com.yunapp.libx.utils.LogUtil;
 import com.yunapp.libx.utils.StorageUtil;
 import com.yunapp.libx.utils.ZipUtil;
 import com.yunapp.libx.webcore.WebCore;
@@ -58,22 +59,26 @@ public class YunApp implements AppListener {
     }
 
     private void loadWebCore() {
+        LogUtil.d("加载WebCore");
         mAppContainer = new WebCore(mContext, mAppConfig, this);
         mYunAppRoot.addView(mAppContainer, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
     }
 
     private void loadPageModule() {
+        LogUtil.d("加载PageManager");
         mPageManager = new PageManager(mContext, mAppConfig);
         mYunAppRoot.addView(mPageManager.getContainer(), new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
     }
 
     @Override
     public void onAppReady() {
+        LogUtil.d("WebCore加载成功，即将启动第一个页面");
         mPageManager.createAndAddPage("", this);
     }
 
     private static void checkMainThread() {
         if (Looper.getMainLooper().getThread() != Thread.currentThread()) {
+            LogUtil.e("当前为非UI线程");
             throw new IllegalThreadStateException("当前非UI线程");
         }
     }
@@ -114,8 +119,10 @@ public class YunApp implements AppListener {
                     InputStream in = mContext.getAssets().open(appId + ".zip");
                     unzipResult = ZipUtil.unzipFile(in, outputPath);
                 } catch (IOException e) {
+                    LogUtil.e(e);
                 }
             }
+            LogUtil.d("小应用zip包解压结果:" + unzipResult);
             return unzipResult;
         }
 

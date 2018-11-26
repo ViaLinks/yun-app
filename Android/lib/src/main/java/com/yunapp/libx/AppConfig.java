@@ -24,7 +24,7 @@ public class AppConfig {
      * @return app未解压zip包的位置
      */
     public File getZipDir() {
-        return StorageUtil.getSubDir(context, "zip");
+        return StorageUtil.getSubDir(context, appId, "zip");
     }
 
     /**
@@ -42,7 +42,29 @@ public class AppConfig {
      * @return app代码位置
      */
     public File getAppSourceDir() {
-        return StorageUtil.getSubDir(context, "source");
+        return StorageUtil.getSubDir(context, appId, "source");
+    }
+
+    public File getStorageDir() {
+        return StorageUtil.getSubDir(context, appId, "storage");
+    }
+
+    /**
+     * 获取webcore执行的代码路径
+     *
+     * @return
+     */
+    public File getWebCoreJsFile() {
+        return new File(getAppSourceDir(), "background.html");
+    }
+
+    /**
+     * 获取配置文件路径
+     *
+     * @return
+     */
+    public File getConfigJsonFile() {
+        return new File(getAppSourceDir(), "app.json");
     }
 
     public String getHomePage() {

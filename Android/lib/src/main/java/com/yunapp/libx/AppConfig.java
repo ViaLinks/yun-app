@@ -16,6 +16,7 @@ public class AppConfig {
 
     public AppConfig(Application context, String id) {
         appId = id;
+        this.context = context;
     }
 
     /**
@@ -68,6 +69,6 @@ public class AppConfig {
     }
 
     public String getHomePage() {
-        return null;
+        return new File(getAppSourceDir(), "index.html").getAbsolutePath();
     }
 }

@@ -27,7 +27,7 @@ public class WebCore extends LinearLayout implements CoreWebView.JsHandler {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        File serviceFile = new File(mAppConfig.getAppSourceDir(), "index.html");
+        File serviceFile = new File(mAppConfig.getAppSourceDir(), "service.html");
         String servicePath = FileUtil.toUriString(serviceFile);
         mCoreWebView.loadUrl(servicePath);
     }

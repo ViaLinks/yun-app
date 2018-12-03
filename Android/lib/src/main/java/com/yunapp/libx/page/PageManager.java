@@ -5,7 +5,6 @@ import android.animation.AnimatorSet;
 import android.animation.LayoutTransition;
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.widget.FrameLayout;
 
@@ -121,11 +120,11 @@ public class PageManager {
     }
 
 
-    public void launchEntryPage(AppListener listener) {
+    public Page launchEntryPage(AppListener listener) {
         String entryPagePath = mAppConfig.getHomePage();
         //
         mPageContainer.removeAllViews();
-        createAndAddPage(entryPagePath, listener);
+        return attachNewPage(entryPagePath, listener).loadPath(entryPagePath);
     }
 
     /**
@@ -135,7 +134,7 @@ public class PageManager {
      * @param listener 页面触发的事件监听
      * @return 新创建的页面
      */
-    public Page createAndAddPage(String url, AppListener listener) {
+    public Page attachNewPage(String url, AppListener listener) {
         if (isTabPage(url)) {
             disableAnimation();
             mPageContainer.removeAllViews();
@@ -151,7 +150,7 @@ public class PageManager {
                 enableAnimation();
             }
         }
-        Page page = new Page(mContext, url, mAppConfig);
+        Page page = Page.newInstance(mContext, mAppConfig);
         page.setAppListener(listener);
         mPageContainer.addView(page, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
         return page;

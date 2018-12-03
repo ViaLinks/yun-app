@@ -66,38 +66,4 @@ public class BaseWebView extends WebView {
             e.printStackTrace();
         }
     }
-
-    public void setJsHandler(String name, JsHandler handler) {
-        addJavascriptInterface(new JSInterface(handler), name);
-    }
-
-    public static interface JsHandler {
-        /**
-         * @param event  事件名称
-         * @param params 参数
-         * @param handle 回调结果处理句柄
-         */
-        void onJsEvent(String event, String params, String handle);
-    }
-
-    private static class JSInterface {
-        private JsHandler mJsHandler;
-        private Handler mHandler = new Handler(Looper.getMainLooper());
-
-        public JSInterface(JsHandler handler) {
-            mJsHandler = handler;
-        }
-
-        @JavascriptInterface
-        public void invoke(final String event, final String params, final String handle) {
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (mJsHandler != null) {
-                        mJsHandler.onJsEvent(event, params, handle);
-                    }
-                }
-            });
-        }
-    }
 }

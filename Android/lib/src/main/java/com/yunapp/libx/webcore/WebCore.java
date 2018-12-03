@@ -6,11 +6,10 @@ import android.widget.LinearLayout;
 import com.yunapp.libx.AppConfig;
 import com.yunapp.libx.AppListener;
 import com.yunapp.libx.utils.FileUtil;
-import com.yunapp.libx.web.BaseWebView;
 
 import java.io.File;
 
-public class WebCore extends LinearLayout implements BaseWebView.JsHandler {
+public class WebCore extends LinearLayout implements CoreWebView.JsHandler {
 
     private AppConfig mAppConfig;
     private CoreWebView mCoreWebView;
@@ -41,11 +40,16 @@ public class WebCore extends LinearLayout implements BaseWebView.JsHandler {
     }
 
     @Override
-    public void onJsEvent(String event, String params, String handle) {
-        if ("custom_event_serviceReady".equals(event)) {
+    public void invokeNative(String api, String params, String callbackId) {
+        if ("onServiceReady".equals(api)) {
             if (mAppListener != null) {
                 mAppListener.onAppReady();
             }
         }
+    }
+
+    @Override
+    public void invokeView(String api, String params, String callbackId, String viewIds) {
+
     }
 }

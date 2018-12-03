@@ -13,10 +13,13 @@ const targetZip = path.join(distDir, `${app.appId}.zip`)
 
 module.exports = {
     mode: 'production',
-    entry: path.join(srcDir, 'main.js'),
+    entry: {
+        // view: path.join(srcDir, 'main.js'),
+        service: path.join(srcDir, 'service', 'index.js')
+    },
     output: {
+        filename: '[name].js',
         path: distDir,
-        filename: 'bundle.js',
     },
     module: {
         rules: [

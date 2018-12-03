@@ -67,8 +67,8 @@ public class BaseWebView extends WebView {
         }
     }
 
-    public void setJsHandler(JsHandler handler) {
-        addJavascriptInterface(new JSInterface(handler), "YunAppJSCore");
+    public void setJsHandler(String name, JsHandler handler) {
+        addJavascriptInterface(new JSInterface(handler), name);
     }
 
     public static interface JsHandler {

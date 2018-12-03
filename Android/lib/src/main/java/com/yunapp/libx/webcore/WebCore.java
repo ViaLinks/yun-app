@@ -6,7 +6,6 @@ import android.widget.LinearLayout;
 import com.yunapp.libx.AppConfig;
 import com.yunapp.libx.AppListener;
 import com.yunapp.libx.utils.FileUtil;
-import com.yunapp.libx.utils.StorageUtil;
 import com.yunapp.libx.web.BaseWebView;
 
 import java.io.File;
@@ -21,7 +20,7 @@ public class WebCore extends LinearLayout implements BaseWebView.JsHandler {
         super(context);
         mAppConfig = appConfig;
         mCoreWebView = new CoreWebView(context);
-        mCoreWebView.setJsHandler(this);
+        mCoreWebView.setJsHandler("NativeApi", this);
         mAppListener = listener;
         addView(mCoreWebView, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
     }
@@ -29,7 +28,7 @@ public class WebCore extends LinearLayout implements BaseWebView.JsHandler {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        File serviceFile = new File(StorageUtil.getMiniAppSourceDir(getContext(), mAppConfig.appId), "index.html");
+        File serviceFile = new File(mAppConfig.getAppSourceDir(), "index.html");
         String servicePath = FileUtil.toUriString(serviceFile);
         mCoreWebView.loadUrl(servicePath);
     }

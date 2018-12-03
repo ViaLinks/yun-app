@@ -1,8 +1,16 @@
 package com.yunapp.libx.nativee.module;
 
 import com.yunapp.libx.AppConfig;
+import com.yunapp.libx.utils.LogUtil;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class BaseModule {
+    protected static final int RESULT_OK = 0;
+    protected static final int RESULT_FAIL = 1;
+    protected static final int RESULT_CANCEL = 2;
+
     protected AppConfig mAppConfig;
 
     public BaseModule(AppConfig appConfig) {
@@ -26,6 +34,35 @@ public class BaseModule {
             return mCallbackId;
         }
 
+        protected String mixResult(int status, JSONObject data) {
+            if (data == null) {
+                data = new JSONObject();
+            }
+            String errMsg;
+            switch (status) {
+                case RESULT_OK:
+                    errMsg = String.format("%s:ok", getEvent());
+                    break;
+                case RESULT_FAIL:
+                    errMsg = String.format("%s:fail", getEvent());
+                    break;
+                case RESULT_CANCEL:
+                    errMsg = String.format("%s:cancel", getEvent());
+                    break;
+                default:
+                    errMsg = String.format("%s:ok", getEvent());
+                    break;
+            }
+
+            try {
+                data.put("errMsg", errMsg);
+            } catch (JSONException e) {
+                LogUtil.e(e);
+            }
+            return data.toString();
+        }
+
         public abstract void onResult(T result);
     }
+
 }

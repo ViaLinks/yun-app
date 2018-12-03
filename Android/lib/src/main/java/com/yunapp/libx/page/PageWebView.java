@@ -1,4 +1,4 @@
-package com.yunapp.libx.webcore;
+package com.yunapp.libx.page;
 
 import android.content.Context;
 import android.os.Handler;
@@ -8,16 +8,16 @@ import android.webkit.JavascriptInterface;
 
 import com.yunapp.libx.web.BaseWebView;
 
-public class CoreWebView extends BaseWebView {
-    public CoreWebView(Context context) {
+public class PageWebView extends BaseWebView {
+    public PageWebView(Context context) {
         super(context);
     }
 
-    public CoreWebView(Context context, AttributeSet attrs) {
+    public PageWebView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public CoreWebView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public PageWebView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 

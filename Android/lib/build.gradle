@@ -21,4 +21,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "com.android.support:design:${rootProject.supportVersion}"
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
 }

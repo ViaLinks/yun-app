@@ -14,7 +14,7 @@
   },
   "homepage": "https://github.com/ViaLinks/yun-app#readme",
   "scripts": {
-    "run:android": "echo TODO: @ushuaia",
+    "run:android": "chmod +x ./build/runAndroid.sh && ./build/runAndroid.sh",
     "dev": "webpack-dev-server --config ./build/webpack.dev.config.js --progress",
     "buildView:dev": "webpack --config ./build/webpack.dev.config.js",
     "build:dev": "webpack --config ./build/service.webpack.config.js --mode development",

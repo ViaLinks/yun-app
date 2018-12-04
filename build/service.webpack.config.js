@@ -1,4 +1,5 @@
 const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const rootDir = path.join(__dirname, '..')
 const srcDir = path.join(rootDir, 'src')
@@ -38,6 +39,11 @@ module.exports = {
         ]
     },
     plugins: [
+        new HtmlWebpackPlugin({
+            template: './src/index.html',
+            inject: true,
+            filename: 'service.html',
+        }),
     ],
     resolve: {
         alias: {

@@ -19,7 +19,7 @@ public class WebCore extends LinearLayout implements CoreWebView.JsHandler {
         super(context);
         mAppConfig = appConfig;
         mCoreWebView = new CoreWebView(context);
-        mCoreWebView.setJsHandler("NativeApi", this);
+        mCoreWebView.setJsHandler("NativeAPI", this);
         mAppListener = listener;
         addView(mCoreWebView, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
     }

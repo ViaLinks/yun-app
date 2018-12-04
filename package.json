@@ -19,9 +19,8 @@
     "android": "npm run run:androidDebug && adb shell am start -n com.yunapp.android/.MainActivity",
 
     "dev": "webpack-dev-server --config ./build/webpack.dev.config.js --progress",
-    "buildView:dev": "webpack --config ./build/webpack.dev.config.js",
-    "build:dev": "webpack --config ./build/service.webpack.config.js --mode development",
-    "build": "npm run clean && webpack --config ./build/webpack.dev.config.js",
+    "buildService:dev": "webpack --config ./build/service.webpack.config.js --mode development",
+    "build:dev": "npm run buildService:dev",
     "clean": "rm -rf ./dist/"
   },
   "devDependencies": {

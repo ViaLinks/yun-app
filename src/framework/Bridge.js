@@ -41,7 +41,7 @@ class Bridge {
 
             if (viewIds) {
                 // Servcie JS 调用 View JS (由 Native 转发)
-                NativeAPI.invokeView(       // TODO: shenglian IMPL
+                NativeApi.invokeView(       // TODO: shenglian IMPL
                     api,
                     JSON.stringify(params),
                     callbackId,
@@ -49,7 +49,7 @@ class Bridge {
                 )
             } else {
                 // Service JS 调用 Native API
-                NativeAPI.invokeNative(     // TODO: shenglian IMPL
+                NativeApi.invokeNative(     // TODO: shenglian IMPL
                     api,
                     JSON.stringify(params),
                     callbackId,

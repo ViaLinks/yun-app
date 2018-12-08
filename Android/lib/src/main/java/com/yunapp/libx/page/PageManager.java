@@ -121,7 +121,7 @@ public class PageManager {
 
 
     public Page launchEntryPage(AppListener listener) {
-        String entryPagePath = mAppContext.getHomePage();
+        String entryPagePath = mAppContext.getHomePage().getAbsolutePath();
         //
         mPageContainer.removeAllViews();
         return attachNewPage(entryPagePath, listener).loadPath(entryPagePath);

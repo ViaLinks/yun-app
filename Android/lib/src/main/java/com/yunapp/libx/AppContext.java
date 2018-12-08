@@ -17,6 +17,9 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 该类的属性和方法在代码zip解压之后访问才是安全的
+ */
 public class AppContext {
 
     private Config config;
@@ -89,6 +92,9 @@ public class AppContext {
     }
 
 
+    /**
+     * 该类的方法和属性在代码zip文件解压前也是安全的
+     */
     public static class Config {
         public static final String NAME = "YunApp";
         public static final String VERSION = "1.0";

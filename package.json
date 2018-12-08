@@ -15,19 +15,21 @@
   "homepage": "https://github.com/ViaLinks/yun-app#readme",
   "scripts": {
     "run:android2": "chmod +x ./build/runAndroid.sh && ./build/runAndroid.sh",
-    "build:androidDebug": "cd ./Android && chmod +x ./gradlew && ./gradlew assembleDebug",
-    "run:androidDebug": "npm run build:androidDebug && adb install -r ./Android/app/build/outputs/apk/debug/app-debug.apk",
-    "android": "npm run run:androidDebug && adb shell am start -n com.yunapp.android/.MainActivity",
+    "build:androidDebug": "babel-node --config-file ./build/babel.config.js ./build/build:androidDebug.js",
+    "android": "npm run build:androidDebug && adb install -r ./Android/app/build/outputs/apk/debug/app-debug.apk && adb shell am start -n com.yunapp.android/.MainActivity",
+    
     "dev": "webpack-dev-server --config ./build/webpack.dev.config.js --progress",
     "buildService:dev": "webpack --config ./build/service.webpack.config.js --mode development",
-    "build:dev": "npm run buildService:dev",
+    "buildView:dev": "ls",
+    "build:dev": "babel-node --config-file ./build/babel.config.js ./build/build:dev.js",
     "clean": "rm -rf ./dist/"
   },
   "devDependencies": {
     "@babel/core": "^7.1.6",
+    "@babel/node": "^7.2.0",
     "@babel/plugin-proposal-class-properties": "^7.1.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
-    "@babel/preset-env": "^7.1.6",
+    "@babel/preset-env": "^7.2.0",
     "babel-loader": "^8.0.4",
     "css-loader": "^1.0.1",
     "filemanager-webpack-plugin": "^2.0.5",

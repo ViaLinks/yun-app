@@ -5,8 +5,8 @@ import android.app.Application;
 import android.os.Bundle;
 import android.widget.FrameLayout;
 
-import com.yunapp.libx.AppConfig;
-import com.yunapp.libx.YunApp;
+import com.yunapp.libx.AppContext;
+import com.yunapp.libx.AppManager;
 
 public class MainActivity extends Activity {
 
@@ -15,9 +15,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        AppConfig appConfig = new AppConfig((Application) getApplicationContext(), "d41d8cd98f00b204e9800998ecf8427e");
-
+        AppContext.Config config = new AppContext.Config((Application) getApplicationContext(), "d41d8cd98f00b204e9800998ecf8427e");
         FrameLayout yunRoot = this.findViewById(R.id.yunAppRoot);
-        YunApp.load(this, yunRoot, appConfig);
+        AppManager.load(this, yunRoot, config);
     }
 }

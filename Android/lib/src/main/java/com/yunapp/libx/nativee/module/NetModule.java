@@ -3,7 +3,7 @@ package com.yunapp.libx.nativee.module;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import com.yunapp.libx.AppConfig;
+import com.yunapp.libx.AppContext.Config;
 import com.yunapp.libx.utils.LogUtil;
 
 import org.json.JSONObject;
@@ -26,7 +26,7 @@ public class NetModule extends BaseModule {
             .writeTimeout(100, TimeUnit.SECONDS)
             .build();
 
-    public NetModule(AppConfig appConfig) {
+    public NetModule(Config appConfig) {
         super(appConfig);
     }
 

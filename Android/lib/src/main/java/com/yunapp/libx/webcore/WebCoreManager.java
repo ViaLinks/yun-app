@@ -3,21 +3,19 @@ package com.yunapp.libx.webcore;
 import android.content.Context;
 import android.widget.LinearLayout;
 
-import com.yunapp.libx.AppConfig;
+import com.yunapp.libx.AppContext;
 import com.yunapp.libx.AppListener;
 import com.yunapp.libx.utils.FileUtil;
 
-import java.io.File;
+public class WebCoreManager extends LinearLayout implements CoreWebView.JsHandler {
 
-public class WebCore extends LinearLayout implements CoreWebView.JsHandler {
-
-    private AppConfig mAppConfig;
+    private AppContext mAppContext;
     private CoreWebView mCoreWebView;
     private AppListener mAppListener;
 
-    public WebCore(Context context, AppConfig appConfig, AppListener listener) {
+    public WebCoreManager(Context context, AppContext appContext, AppListener listener) {
         super(context);
-        mAppConfig = appConfig;
+        mAppContext = appContext;
         mCoreWebView = new CoreWebView(context);
         mCoreWebView.setJsHandler("NativeApi", this);
         mAppListener = listener;
@@ -27,9 +25,7 @@ public class WebCore extends LinearLayout implements CoreWebView.JsHandler {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        File serviceFile = new File(mAppConfig.getAppSourceDir(), "service.html");
-        String servicePath = FileUtil.toUriString(serviceFile);
-        mCoreWebView.loadUrl(servicePath);
+        mCoreWebView.loadUrl(FileUtil.toUriString(mAppContext.getWebCoreJsFile()));
     }
 
     @Override

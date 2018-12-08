@@ -2,7 +2,7 @@ package com.yunapp.libx.utils;
 
 import android.util.Log;
 
-import com.yunapp.libx.AppConfig;
+import com.yunapp.libx.AppContext;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -17,7 +17,7 @@ public class LogUtil {
     }
 
     public static void d(String tag, String debugInfo) {
-        if (AppConfig.DEBUG) {
+        if (AppContext.Config.DEBUG) {
             Log.d(tag, debugInfo);
         }
     }
@@ -27,7 +27,7 @@ public class LogUtil {
     }
 
     public static void w(String tag, String warning) {
-        if (AppConfig.DEBUG) {
+        if (AppContext.Config.DEBUG) {
             Log.w(tag, warning);
         }
     }
@@ -37,7 +37,7 @@ public class LogUtil {
     }
 
     public static void e(String tag, String error) {
-        if (AppConfig.DEBUG) {
+        if (AppContext.Config.DEBUG) {
             Log.e(tag, error);
         }
     }

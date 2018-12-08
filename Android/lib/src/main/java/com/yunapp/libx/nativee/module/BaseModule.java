@@ -1,6 +1,6 @@
 package com.yunapp.libx.nativee.module;
 
-import com.yunapp.libx.AppConfig;
+import com.yunapp.libx.AppContext.Config;
 import com.yunapp.libx.utils.LogUtil;
 
 import org.json.JSONException;
@@ -11,10 +11,10 @@ public class BaseModule {
     protected static final int RESULT_FAIL = 1;
     protected static final int RESULT_CANCEL = 2;
 
-    protected AppConfig mAppConfig;
+    protected Config mConfig;
 
-    public BaseModule(AppConfig appConfig) {
-        this.mAppConfig = appConfig;
+    public BaseModule(Config config) {
+        this.mConfig = config;
     }
 
     public static abstract class EventCallback<T> {

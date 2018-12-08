@@ -5,20 +5,20 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.yunapp.lib.R;
-import com.yunapp.libx.AppConfig;
+import com.yunapp.libx.AppContext;
 import com.yunapp.libx.AppListener;
 import com.yunapp.libx.utils.FileUtil;
 
 public class Page extends LinearLayout {
 
-    private AppConfig mAppConfig;
+    private AppContext mAppContext;
     private AppListener mAppListener;
     private FrameLayout mWebContainer;
     private PageWebView mPageWebView;
 
-    private Page(Context context, AppConfig appConfig) {
+    private Page(Context context, AppContext appConfig) {
         super(context);
-        this.mAppConfig = appConfig;
+        this.mAppContext = appConfig;
         init(context);
     }
 
@@ -40,7 +40,7 @@ public class Page extends LinearLayout {
         mAppListener = listener;
     }
 
-    public static Page newInstance(Context context, AppConfig appConfig) {
+    public static Page newInstance(Context context, AppContext appConfig) {
         return new Page(context, appConfig);
     }
 }

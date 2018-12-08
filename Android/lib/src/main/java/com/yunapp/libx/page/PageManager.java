@@ -8,7 +8,7 @@ import android.content.Context;
 import android.util.DisplayMetrics;
 import android.widget.FrameLayout;
 
-import com.yunapp.libx.AppConfig;
+import com.yunapp.libx.AppContext;
 import com.yunapp.libx.AppListener;
 
 public class PageManager {
@@ -16,12 +16,12 @@ public class PageManager {
     private static final int MAX_COUNT = 5;
 
     private Context mContext;
-    private AppConfig mAppConfig;
+    private AppContext mAppContext;
     private FrameLayout mPageContainer;
 
-    public PageManager(Context context, AppConfig appConfig) {
+    public PageManager(Context context, AppContext appConfig) {
         mContext = context;
-        mAppConfig = appConfig;
+        mAppContext = appConfig;
         mPageContainer = new FrameLayout(context);
 
         DisplayMetrics dm = mContext.getResources().getDisplayMetrics();
@@ -121,7 +121,7 @@ public class PageManager {
 
 
     public Page launchEntryPage(AppListener listener) {
-        String entryPagePath = mAppConfig.getHomePage();
+        String entryPagePath = mAppContext.getHomePage();
         //
         mPageContainer.removeAllViews();
         return attachNewPage(entryPagePath, listener).loadPath(entryPagePath);
@@ -150,7 +150,7 @@ public class PageManager {
                 enableAnimation();
             }
         }
-        Page page = Page.newInstance(mContext, mAppConfig);
+        Page page = Page.newInstance(mContext, mAppContext);
         page.setAppListener(listener);
         mPageContainer.addView(page, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
         return page;

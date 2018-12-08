@@ -1,6 +1,6 @@
 package com.yunapp.libx.nativee.module;
 
-import com.yunapp.libx.AppConfig;
+import com.yunapp.libx.AppContext.Config;
 import com.yunapp.libx.nativee.annotation.NativeMethod;
 import com.yunapp.libx.utils.LogUtil;
 
@@ -12,13 +12,13 @@ import java.io.OutputStream;
 
 public class FileModule extends BaseModule {
 
-    public FileModule(AppConfig appConfig) {
+    public FileModule(Config appConfig) {
         super(appConfig);
     }
 
     @NativeMethod(name = "readFileString")
     public void readFileString(String subPath, EventCallback<String> callback) {
-        File file = new File(mAppConfig.getStorageDir(), subPath);
+        File file = new File(mConfig.getStorageDir(), subPath);
         if (file.exists() && file.isFile() && callback != null) {
             long len = file.length();
             try {
@@ -36,7 +36,7 @@ public class FileModule extends BaseModule {
 
     @NativeMethod(name = "readFileBytes")
     public void readFileBytes(String subPath, EventCallback<byte[]> callback) {
-        File file = new File(mAppConfig.getStorageDir(), subPath);
+        File file = new File(mConfig.getStorageDir(), subPath);
         if (file.exists() && file.isFile() && callback != null) {
             long len = file.length();
             try {
@@ -53,7 +53,7 @@ public class FileModule extends BaseModule {
 
     @NativeMethod(name = "writeFileString")
     public void writeFileString(String subPath, String data, boolean append, EventCallback<Boolean> callback) {
-        File file = new File(mAppConfig.getStorageDir(), subPath);
+        File file = new File(mConfig.getStorageDir(), subPath);
         if (file.exists() && file.isFile() && callback != null) {
             try {
                 OutputStream inputStream = new FileOutputStream(file, append);
@@ -69,7 +69,7 @@ public class FileModule extends BaseModule {
 
     @NativeMethod(name = "writeFileBytes")
     public void writeFileBytes(String subPath, byte[] data, boolean append, EventCallback<Boolean> callback) {
-        File file = new File(mAppConfig.getStorageDir(), subPath);
+        File file = new File(mConfig.getStorageDir(), subPath);
         if (file.exists() && file.isFile() && callback != null) {
             try {
                 OutputStream inputStream = new FileOutputStream(file, append);

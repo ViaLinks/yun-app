@@ -10,7 +10,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.yunapp.libx.AppConfig;
+import com.yunapp.libx.AppContext.Config;
 
 import java.lang.reflect.Method;
 
@@ -46,7 +46,7 @@ public class BaseWebView extends WebView {
         webSetting.setUseWideViewPort(true);
         webSetting.setCacheMode(WebSettings.LOAD_NO_CACHE);
         String ua = webSetting.getUserAgentString();
-        webSetting.setUserAgentString(String.format("%s %s(version/%s)", ua, AppConfig.NAME, AppConfig.VERSION));
+        webSetting.setUserAgentString(String.format("%s %s(version/%s)", ua, Config.NAME, Config.VERSION));
         setVerticalScrollBarEnabled(false);
         setHorizontalScrollBarEnabled(false);
 

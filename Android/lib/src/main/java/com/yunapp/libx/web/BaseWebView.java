@@ -10,6 +10,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.yunapp.lib.BuildConfig;
 import com.yunapp.libx.AppContext.Config;
 
 import java.lang.reflect.Method;
@@ -52,6 +53,8 @@ public class BaseWebView extends WebView {
 
         setWebViewClient(new WebViewClient());
         setWebChromeClient(new WebChromeClient());
+
+        setWebContentsDebuggingEnabled(BuildConfig.DEBUG);
     }
 
     private void removeJavaInterface() {

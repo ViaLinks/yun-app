@@ -48,7 +48,7 @@ public class AppContext {
     }
 
     public File getPage(String pageId) {
-        return new File(getPageDir(), pageId + File.separatorChar + pageId + ".js");
+        return new File(getPageDir(), pageId + ".html");
     }
 
     public File getHomePage() {

@@ -19,7 +19,7 @@
     "dev": "webpack-dev-server --config ./build/webpack.dev.config.js --progress",
     "buildService:dev": "webpack --config ./build/service.webpack.config.js --mode development",
     "buildView:dev": "babel-node --config-file ./build/babel.config.js ./build/buildView:dev.js",
-    "build:dev": "babel-node --config-file ./build/babel.config.js ./build/build:dev.js",
+    "build:dev": "npm run clean && babel-node --config-file ./build/babel.config.js ./build/build:dev.js",
     "clean": "rm -rf ./dist/"
   },
   "devDependencies": {

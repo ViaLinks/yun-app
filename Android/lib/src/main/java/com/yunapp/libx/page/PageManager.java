@@ -120,44 +120,33 @@ public class PageManager {
     }
 
 
-    public Page launchEntryPage(AppListener listener) {
+    public Page launchIndexPage(AppListener listener) {
         String entryPagePath = mAppContext.getHomePage().getAbsolutePath();
         //
         mPageContainer.removeAllViews();
-        return attachNewPage(entryPagePath, listener).loadPath(entryPagePath);
+        return attachNewPage(listener).loadPath(entryPagePath);
     }
 
     /**
      * 创建并添加一个页面
      *
-     * @param url      页面路径
      * @param listener 页面触发的事件监听
      * @return 新创建的页面
      */
-    public Page attachNewPage(String url, AppListener listener) {
-        if (isTabPage(url)) {
+    public Page attachNewPage(AppListener listener) {
+        int pageCount = getPageCount();
+        if (pageCount >= MAX_COUNT) {
+            // TODO: 2018/11/21 不限制页数的话怎么处理呢？
+        }
+        if (pageCount == 0) {
             disableAnimation();
-            mPageContainer.removeAllViews();
         } else {
-            int pageCount = getPageCount();
-            if (pageCount >= MAX_COUNT) {
-                // TODO: 2018/11/21 不限制页数的话怎么处理呢？
-                return null;
-            }
-            if (pageCount == 0) {
-                disableAnimation();
-            } else {
-                enableAnimation();
-            }
+            enableAnimation();
         }
         Page page = Page.newInstance(mContext, mAppContext);
         page.setAppListener(listener);
         mPageContainer.addView(page, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
         return page;
-    }
-
-    public static boolean isTabPage(String url) {
-        return false;
     }
 
 }

@@ -20,15 +20,15 @@ import java.io.InputStream;
  */
 public class AppManager implements AppListener {
 
-    private static final String TAG = "YunApp";
+    private static final String TAG = "AppManager";
 
     private AppContext mAppContext;
 
     private Context mContext;
 
-    private FrameLayout mYunAppRoot = null;
-    private WebCoreManager mWebCore = null;
-    private PageManager mPageManager = null;
+    private FrameLayout mYunAppRoot;
+    private WebCoreManager mWebCoreManager;
+    private PageManager mPageManager;
 
     private AppManager(Context context, FrameLayout rootView, AppContext appContext) {
         this.mContext = context;
@@ -45,35 +45,39 @@ public class AppManager implements AppListener {
     public static void load(final Context context, final FrameLayout rootView, final Config config) {
         checkMainThread();
         rootView.removeAllViews();
-        new LoadTask(context.getApplicationContext(), new AppManager.LoadCallback() {
+        new LoadTask(new AppManager.LoadCallback() {
             @Override
             public void onResult(boolean result) {
                 if (result) {
                     AppManager yunApp = new AppManager(context, rootView, AppContext.buildAppContext(config));
                     yunApp.loadWebCore();
-                    yunApp.loadPageModule();
                 }
             }
-        }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, config);
+        }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, context.getApplicationContext(), config);
     }
 
     private void loadWebCore() {
         LogUtil.d("加载WebCore");
-        mWebCore = new WebCoreManager(mContext, mAppContext, this);
-        mYunAppRoot.addView(mWebCore, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+        mWebCoreManager = new WebCoreManager(mContext, mAppContext, this);
+        mYunAppRoot.addView(mWebCoreManager, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+    }
+
+    @Override
+    public void onAppReady() {
+        LogUtil.d("WebCore加载成功");
+        loadPageModule();
     }
 
     private void loadPageModule() {
         LogUtil.d("加载PageManager");
         mPageManager = new PageManager(mContext, mAppContext);
         mYunAppRoot.addView(mPageManager.getContainer(), new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+        LogUtil.d("即将启动第一个页面");
+        mPageManager.launchIndexPage(this);
     }
 
-    @Override
-    public void onAppReady() {
-        LogUtil.d("WebCore加载成功，即将启动第一个页面");
-        mPageManager.launchEntryPage(this);
-    }
+
+
 
     private static void checkMainThread() {
         if (Looper.getMainLooper().getThread() != Thread.currentThread()) {
@@ -82,31 +86,21 @@ public class AppManager implements AppListener {
         }
     }
 
-    public interface LoadCallback {
-        void onResult(boolean result);
-    }
+    private static class LoadTask extends AsyncTask<Object, Void, Boolean> {
 
-    private static class LoadTask extends AsyncTask<Config, Void, Boolean> {
-
-        private Context mContext;
         private LoadCallback mCallback;
 
-        public LoadTask(Context context, LoadCallback callback) {
-            mContext = context;
+        LoadTask(LoadCallback callback) {
             mCallback = callback;
         }
 
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Boolean doInBackground(Config... params) {
-            if (params == null || params.length != 1) {
+        protected Boolean doInBackground(Object... params) {
+            if (params == null || params.length != 2) {
                 return false;
             }
-            Config appConfig = params[0];
+            Context context = (Context) params[0];
+            Config appConfig = (Config) params[1];
             String zipFilePath = appConfig.getCodeZip().getAbsolutePath();
             String outputPath = appConfig.getAppSourceDir().getAbsolutePath();
             boolean unzipResult = false;
@@ -115,7 +109,7 @@ public class AppManager implements AppListener {
             }
             if (!unzipResult) {
                 try {
-                    InputStream in = mContext.getAssets().open(appConfig.appId + ".zip");
+                    InputStream in = context.getAssets().open(appConfig.appId + ".zip");
                     unzipResult = ZipUtil.unzipFile(in, outputPath);
                 } catch (IOException e) {
                     LogUtil.e(e);
@@ -129,5 +123,9 @@ public class AppManager implements AppListener {
         protected void onPostExecute(Boolean aBoolean) {
             mCallback.onResult(aBoolean);
         }
+    }
+
+    public interface LoadCallback {
+        void onResult(boolean result);
     }
 }

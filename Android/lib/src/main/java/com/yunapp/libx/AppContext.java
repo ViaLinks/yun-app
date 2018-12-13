@@ -1,21 +1,16 @@
 package com.yunapp.libx;
 
 import android.app.Application;
-import android.graphics.Color;
-import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 
 import com.yunapp.libx.utils.FileUtil;
 import com.yunapp.libx.utils.LogUtil;
 import com.yunapp.libx.utils.StorageUtil;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 该类的属性和方法在代码zip解压之后访问才是安全的
@@ -23,8 +18,7 @@ import java.util.Map;
 public class AppContext {
 
     private Config config;
-    private AppInfo appInfo;
-    private Map<String, PageInfo> pagesMap = new HashMap();
+    private String main;
 
     /**
      * 获取webcore执行的代码路径
@@ -54,11 +48,11 @@ public class AppContext {
     }
 
     public File getPage(String pageId) {
-        return new File(getPageDir(), pageId + File.separatorChar + pagesMap.get(pageId).doc);
+        return new File(getPageDir(), pageId + File.separatorChar + pageId + ".js");
     }
 
     public File getHomePage() {
-        return getPage(appInfo.main);
+        return getPage(main);
     }
 
 
@@ -70,22 +64,7 @@ public class AppContext {
         this.config = config;
         try {
             JSONObject appConfig = new JSONObject(FileUtil.readContent(getConfigJsonFile()));
-            this.appInfo = new AppInfo(
-                    appConfig.optString("id"),
-                    appConfig.optString("main", "main"),
-                    Color.parseColor(appConfig.optString("backgroundColor", "#FFFFFF")),
-                    Color.parseColor(appConfig.optString("statusBarColor", "#FFFFFF"))
-            );
-            JSONArray jsonPages = appConfig.getJSONArray("pages");
-            for (int i = 0; i < jsonPages.length(); i++) {
-                JSONObject page = jsonPages.getJSONObject(i);
-                this.pagesMap.put(page.optString("id"), new PageInfo(
-                        appConfig.optString("id"),
-                        appConfig.optString("doc", "view.html"),
-                        Color.parseColor(appConfig.optString("backgroundColor", "#FFFFFF")),
-                        Color.parseColor(appConfig.optString("statusBarColor", "#FFFFFF"))
-                ));
-            }
+            this.main = appConfig.optString("main", "index");
         } catch (JSONException e) {
             LogUtil.e(e);
         }
@@ -137,38 +116,6 @@ public class AppContext {
          */
         public File getCodeZip() {
             return new File(getZipDir(), String.format("%s.zip", appId));
-        }
-    }
-
-    private static class AppInfo {
-        public String id;
-        public String main;
-        public @ColorInt
-        int backgroundColor;
-        public @ColorInt
-        int statusBarColor;
-
-        public AppInfo(String id, String main, int backgroundColor, int statusBarColor) {
-            this.id = id;
-            this.main = main;
-            this.backgroundColor = backgroundColor;
-            this.statusBarColor = statusBarColor;
-        }
-    }
-
-    private static class PageInfo {
-        public String id;
-        public String doc;
-        public @ColorInt
-        int backgroundColor;
-        public @ColorInt
-        int statusBarColor;
-
-        public PageInfo(String id, String doc, int backgroundColor, int statusBarColor) {
-            this.id = id;
-            this.doc = doc;
-            this.backgroundColor = backgroundColor;
-            this.statusBarColor = statusBarColor;
         }
     }
 }

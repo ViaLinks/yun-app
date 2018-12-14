@@ -1,4 +1,4 @@
-package com.yunapp.libx.modules.annotation;
+package com.yunapp.libx.modules;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

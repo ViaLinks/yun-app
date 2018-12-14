@@ -5,7 +5,7 @@ import android.text.TextUtils;
 
 import com.yunapp.libx.AppContext;
 import com.yunapp.libx.modules.AbsModule;
-import com.yunapp.libx.modules.annotation.NativeMethod;
+import com.yunapp.libx.modules.NativeMethod;
 import com.yunapp.libx.utils.LogUtil;
 
 import org.json.JSONObject;

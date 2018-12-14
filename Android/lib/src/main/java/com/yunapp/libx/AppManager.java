@@ -9,7 +9,7 @@ import android.widget.FrameLayout;
 
 import com.yunapp.libx.AppContext.Config;
 import com.yunapp.libx.modules.AbsModule;
-import com.yunapp.libx.modules.annotation.NativeMethod;
+import com.yunapp.libx.modules.NativeMethod;
 import com.yunapp.libx.modules.core.CoreModule;
 import com.yunapp.libx.modules.file.FileModule;
 import com.yunapp.libx.modules.net.NetModule;
@@ -97,6 +97,10 @@ public class AppManager implements AppListener {
             }
             API_MAP.put(name, module);
         }
+    }
+
+    public void onKeyBack(){
+
     }
 
     @Override

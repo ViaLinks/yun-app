@@ -1,4 +1,4 @@
-package com.yunapp.libx.nativee.module;
+package com.yunapp.libx.modules;
 
 import com.yunapp.libx.AppContext.Config;
 import com.yunapp.libx.utils.LogUtil;

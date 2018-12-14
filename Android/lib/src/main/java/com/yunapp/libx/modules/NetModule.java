@@ -1,4 +1,4 @@
-package com.yunapp.libx.nativee.module;
+package com.yunapp.libx.modules;
 
 import android.net.Uri;
 import android.text.TextUtils;

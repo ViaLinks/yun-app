@@ -1,7 +1,7 @@
-package com.yunapp.libx.nativee.module;
+package com.yunapp.libx.modules;
 
 import com.yunapp.libx.AppContext.Config;
-import com.yunapp.libx.nativee.annotation.NativeMethod;
+import com.yunapp.libx.modules.annotation.NativeMethod;
 import com.yunapp.libx.utils.LogUtil;
 
 import java.io.File;

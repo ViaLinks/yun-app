@@ -10,19 +10,24 @@ import android.widget.FrameLayout;
 
 import com.yunapp.libx.AppContext;
 import com.yunapp.libx.AppListener;
+import com.yunapp.libx.utils.LogUtil;
 
-public class PageManager {
+import org.json.JSONObject;
+
+public class PageManager implements PageWebView.JsHandler {
 
     private static final int MAX_COUNT = 5;
 
     private Context mContext;
     private AppContext mAppContext;
     private FrameLayout mPageContainer;
+    private AppListener mAppListener;
 
-    public PageManager(Context context, AppContext appConfig) {
+    public PageManager(Context context, AppContext appConfig, AppListener appListener) {
         mContext = context;
         mAppContext = appConfig;
         mPageContainer = new FrameLayout(context);
+        mAppListener = appListener;
 
         DisplayMetrics dm = mContext.getResources().getDisplayMetrics();
         LayoutTransition transition = new LayoutTransition();
@@ -120,20 +125,19 @@ public class PageManager {
     }
 
 
-    public Page launchIndexPage(AppListener listener) {
+    public Page launchIndexPage() {
         String entryPagePath = mAppContext.getHomePage().getAbsolutePath();
         //
         mPageContainer.removeAllViews();
-        return attachNewPage(listener).loadPath(entryPagePath);
+        return launchPage().loadPath(entryPagePath);
     }
 
     /**
      * 创建并添加一个页面
      *
-     * @param listener 页面触发的事件监听
      * @return 新创建的页面
      */
-    public Page attachNewPage(AppListener listener) {
+    public Page launchPage() {
         int pageCount = getPageCount();
         if (pageCount >= MAX_COUNT) {
             // TODO: 2018/11/21 不限制页数的话怎么处理呢？
@@ -144,9 +148,21 @@ public class PageManager {
             enableAnimation();
         }
         Page page = Page.newInstance(mContext, mAppContext);
-        page.setAppListener(listener);
+        page.setAppListener(mAppListener);
+        page.setJsHandler("NativeApi", this);
         mPageContainer.addView(page, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
         return page;
     }
 
+    @Override
+    public void invokeView(String api, String params, String callbackId, String viewIds) {
+        try {
+            if ("goto".equals(api)) {
+                JSONObject p = new JSONObject(params);
+                launchPage().loadPath(mAppContext.getPage(p.optString("name")).getAbsolutePath());
+            }
+        } catch (Exception e) {
+            LogUtil.e(e);
+        }
+    }
 }

@@ -30,13 +30,6 @@ public class PageWebView extends BaseWebView {
          * @param api        事件名称
          * @param params     参数
          * @param callbackId 回调Id
-         */
-        void invokeNative(String api, String params, String callbackId);
-
-        /**
-         * @param api        事件名称
-         * @param params     参数
-         * @param callbackId 回调Id
          * @param viewIds
          */
         void invokeView(String api, String params, String callbackId, String viewIds);
@@ -57,18 +50,6 @@ public class PageWebView extends BaseWebView {
                 public void run() {
                     if (mJsHandler != null) {
                         mJsHandler.invokeView(api, params, callbackId, viewIds);
-                    }
-                }
-            });
-        }
-
-        @JavascriptInterface
-        public void invokeNative(final String api, final String params, final String callbackId) {
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (mJsHandler != null) {
-                        mJsHandler.invokeNative(api, params, callbackId);
                     }
                 }
             });

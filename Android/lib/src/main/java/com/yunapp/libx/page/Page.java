@@ -36,6 +36,14 @@ public class Page extends LinearLayout {
         return this;
     }
 
+    public void setJsHandler(String name, PageWebView.JsHandler handler) {
+        mPageWebView.setJsHandler(name, handler);
+    }
+
+    public int getViewId() {
+        return mPageWebView.getId();
+    }
+
     public void setAppListener(AppListener listener) {
         mAppListener = listener;
     }

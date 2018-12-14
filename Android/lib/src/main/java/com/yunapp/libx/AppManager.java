@@ -70,13 +70,11 @@ public class AppManager implements AppListener {
 
     private void loadPageModule() {
         LogUtil.d("加载PageManager");
-        mPageManager = new PageManager(mContext, mAppContext);
+        mPageManager = new PageManager(mContext, mAppContext, this);
         mYunAppRoot.addView(mPageManager.getContainer(), new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
         LogUtil.d("即将启动第一个页面");
-        mPageManager.launchIndexPage(this);
+        mPageManager.launchIndexPage();
     }
-
-
 
 
     private static void checkMainThread() {

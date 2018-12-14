@@ -17,9 +17,10 @@ import com.yunapp.libx.utils.LogUtil;
 
 import org.json.JSONObject;
 
-@NativeMethod(PageModule.API_GO_TO)
+@NativeMethod({PageModule.API_GO_TO, PageModule.API_KEY_BACK})
 public class PageModule extends AbsModule implements PageWebView.JsHandler {
     public static final String API_GO_TO = "goto";
+    public static final String API_KEY_BACK = "keyback";
     private static final int MAX_COUNT = 5;
 
     private Context mContext;
@@ -116,7 +117,7 @@ public class PageModule extends AbsModule implements PageWebView.JsHandler {
         if (count <= 0) {
             return null;
         }
-        return (PageView) mPageContainer.getChildAt(count - 1);
+        return getPageAt(count - 1);
     }
 
     /**
@@ -127,6 +128,12 @@ public class PageModule extends AbsModule implements PageWebView.JsHandler {
      */
     public PageView getPageAt(int index) {
         return (PageView) mPageContainer.getChildAt(index);
+    }
+
+    public void closePage(PageView page) {
+        if (page != null) {
+            mPageContainer.removeView(page);
+        }
     }
 
 
@@ -173,6 +180,10 @@ public class PageModule extends AbsModule implements PageWebView.JsHandler {
                 gotoPage(params, callback);
                 break;
             }
+            case API_KEY_BACK: {
+                keyBack(params, callback);
+                break;
+            }
         }
     }
 
@@ -182,6 +193,16 @@ public class PageModule extends AbsModule implements PageWebView.JsHandler {
             launchPage().loadPath(mAppContext.getPage(p.optString("name")).getAbsolutePath());
         } catch (Exception e) {
             LogUtil.e(e);
+        }
+    }
+
+    private void keyBack(String params, EventCallback callback) {
+        if (getPageCount() > 1) {
+            closePage(getTopPage());
+        } else {
+            if (mContext != null && mContext instanceof Activity) {
+                ((Activity) mContext).finish();
+            }
         }
     }
 

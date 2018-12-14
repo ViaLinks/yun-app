@@ -8,15 +8,27 @@
 </head>
 
 <body>
-  <div id="app">First Page</div>
   <!-- built files will be auto injected -->
-  <button onclick="jump2SecondPage()">点击我跳转到第二页</button>
+  <div class="container">
+    First Page
+    <button onclick="jump2SecondPage()">点击我跳转到第二页</button>
+  </div>
 
   <script>
     function jump2SecondPage() {
       NativeApi.invokeView("goto", "{'name':'second'}", null, null)
     }
   </script>
+
+  <style>
+    .container {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: 2000px;
+      background-color: azure;
+    }
+  </style>
 </body>
 
 </html>

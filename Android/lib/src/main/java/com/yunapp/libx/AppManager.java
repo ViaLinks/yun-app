@@ -46,7 +46,7 @@ public class AppManager implements AppListener {
      * @param config   小应用的配置
      * @return
      */
-    public static void load(final Activity context, final FrameLayout rootView, final Config config) {
+    public static void load(final Activity context, final FrameLayout rootView, final Config config, final AppBootListener appBootListener) {
         checkMainThread();
         rootView.removeAllViews();
         new LoadTask(new AppManager.LoadCallback() {
@@ -56,6 +56,9 @@ public class AppManager implements AppListener {
                     AppManager yunApp = new AppManager(context, rootView, AppContext.buildAppContext(config));
                     yunApp.loadDefaultModules();
                     yunApp.loadCoreModule();
+                    if (appBootListener != null) {
+                        appBootListener.onAppBooted(yunApp);
+                    }
                 }
             }
         }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, context.getApplicationContext(), config);
@@ -99,8 +102,8 @@ public class AppManager implements AppListener {
         }
     }
 
-    public void onKeyBack(){
-
+    public void onKeyBack() {
+        invokeNative("keyback", null, null);
     }
 
     @Override
@@ -165,5 +168,9 @@ public class AppManager implements AppListener {
 
     public interface LoadCallback {
         void onResult(boolean result);
+    }
+
+    public interface AppBootListener {
+        void onAppBooted(AppManager appManager);
     }
 }

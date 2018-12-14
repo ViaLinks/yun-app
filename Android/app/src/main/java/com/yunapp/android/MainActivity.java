@@ -19,14 +19,22 @@ public class MainActivity extends Activity {
 
         AppContext.Config config = new AppContext.Config((Application) getApplicationContext(), "d41d8cd98f00b204e9800998ecf8427e");
         FrameLayout yunRoot = this.findViewById(R.id.yunAppRoot);
-        AppManager.load(this, yunRoot, config);
+        AppManager.load(this, yunRoot, config, new AppManager.AppBootListener() {
+            @Override
+            public void onAppBooted(AppManager appManager) {
+                mAppManager = appManager;
+            }
+        });
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
             case KeyEvent.KEYCODE_BACK: {
-
+                if (mAppManager != null) {
+                    mAppManager.onKeyBack();
+                    return true;
+                }
                 break;
             }
         }

@@ -1,4 +1,4 @@
-package com.yunapp.libx.base;
+package com.yunapp.libx;
 
 import android.content.Context;
 import android.util.AttributeSet;

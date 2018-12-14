@@ -1,5 +1,6 @@
 package com.yunapp.libx;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Looper;
@@ -7,13 +8,19 @@ import android.text.TextUtils;
 import android.widget.FrameLayout;
 
 import com.yunapp.libx.AppContext.Config;
-import com.yunapp.libx.page.PageManager;
+import com.yunapp.libx.modules.AbsModule;
+import com.yunapp.libx.modules.annotation.NativeMethod;
+import com.yunapp.libx.modules.core.CoreModule;
+import com.yunapp.libx.modules.file.FileModule;
+import com.yunapp.libx.modules.net.NetModule;
+import com.yunapp.libx.modules.page.PageModule;
 import com.yunapp.libx.utils.LogUtil;
 import com.yunapp.libx.utils.ZipUtil;
-import com.yunapp.libx.webcore.WebCoreManager;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 每一个YunApp实例代表一个小应用
@@ -23,14 +30,11 @@ public class AppManager implements AppListener {
     private static final String TAG = "AppManager";
 
     private AppContext mAppContext;
-
-    private Context mContext;
-
+    private Activity mContext;
+    private Map<String, AbsModule> API_MAP = new HashMap<>();
     private FrameLayout mYunAppRoot;
-    private WebCoreManager mWebCoreManager;
-    private PageManager mPageManager;
 
-    private AppManager(Context context, FrameLayout rootView, AppContext appContext) {
+    private AppManager(Activity context, FrameLayout rootView, AppContext appContext) {
         this.mContext = context;
         this.mYunAppRoot = rootView;
         this.mAppContext = appContext;
@@ -42,7 +46,7 @@ public class AppManager implements AppListener {
      * @param config   小应用的配置
      * @return
      */
-    public static void load(final Context context, final FrameLayout rootView, final Config config) {
+    public static void load(final Activity context, final FrameLayout rootView, final Config config) {
         checkMainThread();
         rootView.removeAllViews();
         new LoadTask(new AppManager.LoadCallback() {
@@ -50,30 +54,62 @@ public class AppManager implements AppListener {
             public void onResult(boolean result) {
                 if (result) {
                     AppManager yunApp = new AppManager(context, rootView, AppContext.buildAppContext(config));
-                    yunApp.loadWebCore();
+                    yunApp.loadDefaultModules();
+                    yunApp.loadCoreModule();
                 }
             }
         }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, context.getApplicationContext(), config);
     }
 
-    private void loadWebCore() {
-        LogUtil.d("加载WebCore");
-        mWebCoreManager = new WebCoreManager(mContext, mAppContext, this);
-        mYunAppRoot.addView(mWebCoreManager, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+    private void loadDefaultModules() {
+        loadModule(new NetModule(mAppContext));
+        loadModule(new FileModule(mAppContext));
     }
 
-    @Override
-    public void onAppReady() {
-        LogUtil.d("WebCore加载成功");
-        loadPageModule();
+    private void loadCoreModule() {
+        LogUtil.d("加载WebCore");
+        CoreModule coreModule = new CoreModule(mContext, mAppContext, this);
+        loadModule(coreModule);
+        mYunAppRoot.addView(coreModule.getCoreWebView(), new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
     }
 
     private void loadPageModule() {
         LogUtil.d("加载PageManager");
-        mPageManager = new PageManager(mContext, mAppContext, this);
-        mYunAppRoot.addView(mPageManager.getContainer(), new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+        PageModule pageModule = new PageModule(mContext, mAppContext, this);
+        loadModule(pageModule);
+        mYunAppRoot.addView(pageModule.getContainer(), new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
         LogUtil.d("即将启动第一个页面");
-        mPageManager.launchIndexPage();
+        pageModule.launchIndexPage();
+    }
+
+    private void loadModule(AbsModule module) {
+        if (module == null) return;
+
+        NativeMethod annotation = module.getClass().getAnnotation(NativeMethod.class);
+        if (annotation == null) return;
+
+        String[] names = annotation.value();
+        if (names.length == 0) return;
+
+        for (String name : names) {
+            if (TextUtils.isEmpty(name)) {
+                continue;
+            }
+            API_MAP.put(name, module);
+        }
+    }
+
+    @Override
+    public void invokeNative(String api, String params, AbsModule.EventCallback callback) {
+        if ("onServiceReady".equals(api)) {
+            LogUtil.d("WebCore加载成功");
+            loadPageModule();
+        } else {
+            AbsModule module = API_MAP.get(api);
+            if (module != null) {
+                module.invoke(api, params, callback);
+            }
+        }
     }
 
 

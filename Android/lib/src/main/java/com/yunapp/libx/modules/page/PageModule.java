@@ -1,21 +1,25 @@
-package com.yunapp.libx.page;
+package com.yunapp.libx.modules.page;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.LayoutTransition;
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.content.Context;
 import android.util.DisplayMetrics;
 import android.widget.FrameLayout;
 
 import com.yunapp.libx.AppContext;
 import com.yunapp.libx.AppListener;
+import com.yunapp.libx.modules.AbsModule;
+import com.yunapp.libx.modules.annotation.NativeMethod;
 import com.yunapp.libx.utils.LogUtil;
 
 import org.json.JSONObject;
 
-public class PageManager implements PageWebView.JsHandler {
-
+@NativeMethod(PageModule.API_GO_TO)
+public class PageModule extends AbsModule implements PageWebView.JsHandler {
+    public static final String API_GO_TO = "goto";
     private static final int MAX_COUNT = 5;
 
     private Context mContext;
@@ -23,10 +27,11 @@ public class PageManager implements PageWebView.JsHandler {
     private FrameLayout mPageContainer;
     private AppListener mAppListener;
 
-    public PageManager(Context context, AppContext appConfig, AppListener appListener) {
-        mContext = context;
+    public PageModule(Activity activity, AppContext appConfig, AppListener appListener) {
+        super(appConfig);
+        mContext = activity;
         mAppContext = appConfig;
-        mPageContainer = new FrameLayout(context);
+        mPageContainer = new FrameLayout(activity);
         mAppListener = appListener;
 
         DisplayMetrics dm = mContext.getResources().getDisplayMetrics();
@@ -106,12 +111,12 @@ public class PageManager implements PageWebView.JsHandler {
      *
      * @return 当前显示的页面
      */
-    public Page getTopPage() {
+    public PageView getTopPage() {
         int count = mPageContainer.getChildCount();
         if (count <= 0) {
             return null;
         }
-        return (Page) mPageContainer.getChildAt(count - 1);
+        return (PageView) mPageContainer.getChildAt(count - 1);
     }
 
     /**
@@ -120,12 +125,12 @@ public class PageManager implements PageWebView.JsHandler {
      * @param index 索引值
      * @return 索引位置的页面
      */
-    public Page getPageAt(int index) {
-        return (Page) mPageContainer.getChildAt(index);
+    public PageView getPageAt(int index) {
+        return (PageView) mPageContainer.getChildAt(index);
     }
 
 
-    public Page launchIndexPage() {
+    public PageView launchIndexPage() {
         String entryPagePath = mAppContext.getHomePage().getAbsolutePath();
         //
         mPageContainer.removeAllViews();
@@ -137,7 +142,7 @@ public class PageManager implements PageWebView.JsHandler {
      *
      * @return 新创建的页面
      */
-    public Page launchPage() {
+    public PageView launchPage() {
         int pageCount = getPageCount();
         if (pageCount >= MAX_COUNT) {
             // TODO: 2018/11/21 不限制页数的话怎么处理呢？
@@ -147,7 +152,7 @@ public class PageManager implements PageWebView.JsHandler {
         } else {
             enableAnimation();
         }
-        Page page = Page.newInstance(mContext, mAppContext);
+        PageView page = PageView.newInstance(mContext, mAppContext);
         page.setAppListener(mAppListener);
         page.setJsHandler("NativeApi", this);
         mPageContainer.addView(page, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
@@ -156,13 +161,29 @@ public class PageManager implements PageWebView.JsHandler {
 
     @Override
     public void invokeView(String api, String params, String callbackId, String viewIds) {
-        try {
-            if ("goto".equals(api)) {
-                JSONObject p = new JSONObject(params);
-                launchPage().loadPath(mAppContext.getPage(p.optString("name")).getAbsolutePath());
+        if (mAppListener != null) {
+            mAppListener.invokeNative(api, params, null);
+        }
+    }
+
+    @Override
+    public void invoke(String api, String params, EventCallback callback) {
+        switch (api) {
+            case API_GO_TO: {
+                gotoPage(params, callback);
+                break;
             }
+        }
+    }
+
+    private void gotoPage(String params, EventCallback callback) {
+        try {
+            JSONObject p = new JSONObject(params);
+            launchPage().loadPath(mAppContext.getPage(p.optString("name")).getAbsolutePath());
         } catch (Exception e) {
             LogUtil.e(e);
         }
     }
+
+
 }

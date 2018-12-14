@@ -1,4 +1,4 @@
-package com.yunapp.libx.webcore;
+package com.yunapp.libx.modules.core;
 
 import android.content.Context;
 import android.os.Handler;
@@ -6,11 +6,16 @@ import android.os.Looper;
 import android.util.AttributeSet;
 import android.webkit.JavascriptInterface;
 
-import com.yunapp.libx.base.BaseWebView;
+import com.yunapp.libx.AppContext;
+import com.yunapp.libx.BaseWebView;
+import com.yunapp.libx.utils.FileUtil;
 
 public class CoreWebView extends BaseWebView {
-    public CoreWebView(Context context) {
+    private AppContext mAppContext;
+
+    public CoreWebView(Context context, AppContext appContext) {
         super(context);
+        mAppContext = appContext;
     }
 
     public CoreWebView(Context context, AttributeSet attrs) {
@@ -23,6 +28,19 @@ public class CoreWebView extends BaseWebView {
 
     public void setJsHandler(String name, JsHandler handler) {
         addJavascriptInterface(new JSInterface(handler), name);
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        loadUrl(FileUtil.toUriString(mAppContext.getWebCoreJsFile()));
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        removeAllViews();
+        destroy();
     }
 
     public static interface JsHandler {

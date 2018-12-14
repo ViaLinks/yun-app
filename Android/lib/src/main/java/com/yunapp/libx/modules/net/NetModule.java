@@ -1,9 +1,11 @@
-package com.yunapp.libx.modules;
+package com.yunapp.libx.modules.net;
 
 import android.net.Uri;
 import android.text.TextUtils;
 
-import com.yunapp.libx.AppContext.Config;
+import com.yunapp.libx.AppContext;
+import com.yunapp.libx.modules.AbsModule;
+import com.yunapp.libx.modules.annotation.NativeMethod;
 import com.yunapp.libx.utils.LogUtil;
 
 import org.json.JSONObject;
@@ -18,7 +20,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class NetModule extends BaseModule {
+@NativeMethod("get")
+public class NetModule extends AbsModule {
 
     private static final OkHttpClient CLIENT = new OkHttpClient.Builder()
             .connectTimeout(100, TimeUnit.SECONDS)
@@ -26,8 +29,13 @@ public class NetModule extends BaseModule {
             .writeTimeout(100, TimeUnit.SECONDS)
             .build();
 
-    public NetModule(Config appConfig) {
-        super(appConfig);
+    public NetModule(AppContext appContext) {
+        super(appContext);
+    }
+
+    @Override
+    public void invoke(String event, String params, EventCallback callback) {
+
     }
 
     public void get(String url, String query, String headers, final EventCallback<String> eventCallback) {

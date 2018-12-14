@@ -1,4 +1,4 @@
-package com.yunapp.libx.page;
+package com.yunapp.libx.modules.page;
 
 import android.content.Context;
 import android.widget.FrameLayout;
@@ -9,14 +9,14 @@ import com.yunapp.libx.AppContext;
 import com.yunapp.libx.AppListener;
 import com.yunapp.libx.utils.FileUtil;
 
-public class Page extends LinearLayout {
+public class PageView extends LinearLayout {
 
     private AppContext mAppContext;
     private AppListener mAppListener;
     private FrameLayout mWebContainer;
     private PageWebView mPageWebView;
 
-    private Page(Context context, AppContext appConfig) {
+    private PageView(Context context, AppContext appConfig) {
         super(context);
         this.mAppContext = appConfig;
         init(context);
@@ -31,7 +31,7 @@ public class Page extends LinearLayout {
         mWebContainer.addView(mPageWebView, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
     }
 
-    public Page loadPath(String path) {
+    public PageView loadPath(String path) {
         mPageWebView.loadUrl(FileUtil.toUriString(path));
         return this;
     }
@@ -48,7 +48,7 @@ public class Page extends LinearLayout {
         mAppListener = listener;
     }
 
-    public static Page newInstance(Context context, AppContext appConfig) {
-        return new Page(context, appConfig);
+    public static PageView newInstance(Context context, AppContext appConfig) {
+        return new PageView(context, appConfig);
     }
 }

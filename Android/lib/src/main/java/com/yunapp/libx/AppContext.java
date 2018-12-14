@@ -17,7 +17,7 @@ import java.io.File;
  */
 public class AppContext {
 
-    private Config config;
+    public Config config;
     private String main;
 
     /**

@@ -1,4 +1,4 @@
-package com.yunapp.libx.page;
+package com.yunapp.libx.modules.page;
 
 import android.content.Context;
 import android.os.Handler;
@@ -6,7 +6,7 @@ import android.os.Looper;
 import android.util.AttributeSet;
 import android.webkit.JavascriptInterface;
 
-import com.yunapp.libx.base.BaseWebView;
+import com.yunapp.libx.BaseWebView;
 
 public class PageWebView extends BaseWebView {
     public PageWebView(Context context) {

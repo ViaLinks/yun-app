@@ -1,6 +1,7 @@
-package com.yunapp.libx.modules;
+package com.yunapp.libx.modules.file;
 
-import com.yunapp.libx.AppContext.Config;
+import com.yunapp.libx.AppContext;
+import com.yunapp.libx.modules.AbsModule;
 import com.yunapp.libx.modules.annotation.NativeMethod;
 import com.yunapp.libx.utils.LogUtil;
 
@@ -10,15 +11,30 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class FileModule extends BaseModule {
+@NativeMethod({FileModule.READ_FILE, FileModule.WRITE_FILE})
+public class FileModule extends AbsModule {
+    public static final String READ_FILE = "readFileString";
+    public static final String WRITE_FILE = "writeFileString";
 
-    public FileModule(Config appConfig) {
-        super(appConfig);
+    public FileModule(AppContext appContext) {
+        super(appContext);
     }
 
-    @NativeMethod(name = "readFileString")
+    @Override
+    public void invoke(String event, String params, EventCallback callback) {
+        switch (event) {
+            case READ_FILE: {
+                break;
+            }
+            case WRITE_FILE: {
+                break;
+            }
+        }
+    }
+
+
     public void readFileString(String subPath, EventCallback<String> callback) {
-        File file = new File(mConfig.getStorageDir(), subPath);
+        File file = new File(mAppContext.config.getStorageDir(), subPath);
         if (file.exists() && file.isFile() && callback != null) {
             long len = file.length();
             try {
@@ -34,9 +50,8 @@ public class FileModule extends BaseModule {
         }
     }
 
-    @NativeMethod(name = "readFileBytes")
     public void readFileBytes(String subPath, EventCallback<byte[]> callback) {
-        File file = new File(mConfig.getStorageDir(), subPath);
+        File file = new File(mAppContext.config.getStorageDir(), subPath);
         if (file.exists() && file.isFile() && callback != null) {
             long len = file.length();
             try {
@@ -51,9 +66,8 @@ public class FileModule extends BaseModule {
         }
     }
 
-    @NativeMethod(name = "writeFileString")
     public void writeFileString(String subPath, String data, boolean append, EventCallback<Boolean> callback) {
-        File file = new File(mConfig.getStorageDir(), subPath);
+        File file = new File(mAppContext.config.getStorageDir(), subPath);
         if (file.exists() && file.isFile() && callback != null) {
             try {
                 OutputStream inputStream = new FileOutputStream(file, append);
@@ -67,9 +81,8 @@ public class FileModule extends BaseModule {
         }
     }
 
-    @NativeMethod(name = "writeFileBytes")
     public void writeFileBytes(String subPath, byte[] data, boolean append, EventCallback<Boolean> callback) {
-        File file = new File(mConfig.getStorageDir(), subPath);
+        File file = new File(mAppContext.config.getStorageDir(), subPath);
         if (file.exists() && file.isFile() && callback != null) {
             try {
                 OutputStream inputStream = new FileOutputStream(file, append);

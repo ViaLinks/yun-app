@@ -204,7 +204,7 @@ public class PageModule extends AbsModule implements PageWebView.JsHandler {
         if (getPageCount() > 1) {
             closePage(getTopPage());
         } else {
-            if (mContext != null && mContext instanceof Activity) {
+            if (mContext instanceof Activity) {
                 ((Activity) mContext).finish();
             }
         }

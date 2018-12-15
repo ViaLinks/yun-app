@@ -196,7 +196,8 @@ public class PageModule extends AbsModule implements PageWebView.JsHandler {
             }
         } catch (Exception e) {
             LogUtil.e(e);
-            callback.onResult(packageResult(callback.getEvent(), RESULT_OK, null));
+            if (callback != null)
+                callback.onResult(packageResult(callback.getEvent(), RESULT_OK, null));
         }
     }
 
@@ -208,7 +209,9 @@ public class PageModule extends AbsModule implements PageWebView.JsHandler {
                 ((Activity) mContext).finish();
             }
         }
-        callback.onResult(packageResult(callback.getEvent(), RESULT_OK, null));
+        if (callback != null) {
+            callback.onResult(packageResult(callback.getEvent(), RESULT_OK, null));
+        }
     }
 
 

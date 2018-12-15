@@ -58,7 +58,8 @@ public class FileModule extends AbsModule {
             }
         } catch (Exception e) {
             LogUtil.e(e);
-            callback.onResult(packageResult(callback.getEvent(), RESULT_FAIL, null));
+            if (callback != null)
+                callback.onResult(packageResult(callback.getEvent(), RESULT_FAIL, null));
         }
     }
 

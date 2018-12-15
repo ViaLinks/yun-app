@@ -160,7 +160,8 @@ public class NetModule extends AbsModule {
                 HANDLER.post(new Runnable() {
                     @Override
                     public void run() {
-                        eventCallback.onResult(packageResult(eventCallback.getEvent(), RESULT_FAIL, null));
+                        if (eventCallback != null)
+                            eventCallback.onResult(packageResult(eventCallback.getEvent(), RESULT_FAIL, null));
                     }
                 });
                 return;
@@ -196,7 +197,8 @@ public class NetModule extends AbsModule {
                     HANDLER.post(new Runnable() {
                         @Override
                         public void run() {
-                            eventCallback.onResult(packageResult(eventCallback.getEvent(), RESULT_OK, data));
+                            if (eventCallback != null)
+                                eventCallback.onResult(packageResult(eventCallback.getEvent(), RESULT_OK, data));
                         }
                     });
                 }
@@ -212,7 +214,8 @@ public class NetModule extends AbsModule {
                     HANDLER.post(new Runnable() {
                         @Override
                         public void run() {
-                            eventCallback.onResult(packageResult(eventCallback.getEvent(), RESULT_FAIL, data));
+                            if (eventCallback != null)
+                                eventCallback.onResult(packageResult(eventCallback.getEvent(), RESULT_FAIL, data));
                         }
                     });
                 }
@@ -222,7 +225,8 @@ public class NetModule extends AbsModule {
             HANDLER.post(new Runnable() {
                 @Override
                 public void run() {
-                    eventCallback.onResult(packageResult(eventCallback.getEvent(), RESULT_FAIL, null));
+                    if (eventCallback != null)
+                        eventCallback.onResult(packageResult(eventCallback.getEvent(), RESULT_FAIL, null));
                 }
             });
         }

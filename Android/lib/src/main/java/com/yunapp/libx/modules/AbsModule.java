@@ -1,5 +1,8 @@
 package com.yunapp.libx.modules;
 
+import android.os.Handler;
+import android.os.Looper;
+
 import com.yunapp.libx.AppContext;
 import com.yunapp.libx.utils.LogUtil;
 
@@ -11,6 +14,8 @@ public abstract class AbsModule {
     protected static final int RESULT_FAIL = 1;
     protected static final int RESULT_CANCEL = 2;
 
+    protected static final Handler HANDLER = new Handler(Looper.getMainLooper());
+
     protected AppContext mAppContext;
 
     public AbsModule(AppContext appContext) {
@@ -19,7 +24,36 @@ public abstract class AbsModule {
 
     public abstract void invoke(String event, String params, EventCallback callback);
 
-    public static abstract class EventCallback<T> {
+    public String packageResult(String event, int status, JSONObject data) {
+        JSONObject resp = new JSONObject();
+        try {
+            String msg;
+            switch (status) {
+                case RESULT_OK:
+                    msg = String.format("%s:ok", event);
+                    break;
+                case RESULT_FAIL:
+                    msg = String.format("%s:fail", event);
+                    break;
+                case RESULT_CANCEL:
+                    msg = String.format("%s:cancel", event);
+                    break;
+                default:
+                    msg = String.format("%s:ok", event);
+                    break;
+            }
+            resp.put("msg", msg);
+            resp.put("code", status);
+            if (data != null) {
+                resp.put("data", data);
+            }
+        } catch (JSONException e) {
+            LogUtil.e(e);
+        }
+        return resp.toString();
+    }
+
+    public static abstract class EventCallback {
         private String mEvent;
         private String mCallbackId;
 
@@ -36,35 +70,7 @@ public abstract class AbsModule {
             return mCallbackId;
         }
 
-        protected String mixResult(int status, JSONObject data) {
-            if (data == null) {
-                data = new JSONObject();
-            }
-            String errMsg;
-            switch (status) {
-                case RESULT_OK:
-                    errMsg = String.format("%s:ok", getEvent());
-                    break;
-                case RESULT_FAIL:
-                    errMsg = String.format("%s:fail", getEvent());
-                    break;
-                case RESULT_CANCEL:
-                    errMsg = String.format("%s:cancel", getEvent());
-                    break;
-                default:
-                    errMsg = String.format("%s:ok", getEvent());
-                    break;
-            }
-
-            try {
-                data.put("errMsg", errMsg);
-            } catch (JSONException e) {
-                LogUtil.e(e);
-            }
-            return data.toString();
-        }
-
-        public abstract void onResult(T result);
+        public abstract void onResult(String result);
     }
 
 }

@@ -14,6 +14,7 @@ import com.yunapp.libx.modules.core.CoreModule;
 import com.yunapp.libx.modules.file.FileModule;
 import com.yunapp.libx.modules.net.NetModule;
 import com.yunapp.libx.modules.page.PageModule;
+import com.yunapp.libx.modules.toast.ToastModule;
 import com.yunapp.libx.utils.LogUtil;
 import com.yunapp.libx.utils.ZipUtil;
 
@@ -67,6 +68,7 @@ public class AppManager implements AppListener {
     private void loadDefaultModules() {
         loadModule(new NetModule(mAppContext));
         loadModule(new FileModule(mAppContext));
+        loadModule(new ToastModule(mAppContext, mContext.getApplicationContext()));
     }
 
     private void loadCoreModule() {

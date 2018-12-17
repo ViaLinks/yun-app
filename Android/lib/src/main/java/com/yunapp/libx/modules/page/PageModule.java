@@ -191,8 +191,13 @@ public class PageModule extends AbsModule implements PageWebView.JsHandler {
         try {
             JSONObject p = new JSONObject(params);
             launchPage().loadPath(mAppContext.getPage(p.optString("name")).getAbsolutePath());
+            if (callback != null) {
+                callback.onResult(packageResult(callback.getEvent(), RESULT_OK, null));
+            }
         } catch (Exception e) {
             LogUtil.e(e);
+            if (callback != null)
+                callback.onResult(packageResult(callback.getEvent(), RESULT_OK, null));
         }
     }
 
@@ -200,9 +205,12 @@ public class PageModule extends AbsModule implements PageWebView.JsHandler {
         if (getPageCount() > 1) {
             closePage(getTopPage());
         } else {
-            if (mContext != null && mContext instanceof Activity) {
+            if (mContext instanceof Activity) {
                 ((Activity) mContext).finish();
             }
+        }
+        if (callback != null) {
+            callback.onResult(packageResult(callback.getEvent(), RESULT_OK, null));
         }
     }
 

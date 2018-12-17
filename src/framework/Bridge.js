@@ -20,11 +20,13 @@ class Bridge {
      * 所有调用都需要 Native 回调.
      * 
      * @param {String} api 调用的函数名
-     * @param {Object} params 参数
+     * @param {Array} params 参数
      * @param {null | Array<String>} viewIds `null` 则为调用 Native API, 否则为调用相应 Page(View JS) 中的方法
+     * @param {isSync} 是否异步执行
+     * @param {isOnMainThread} 是否主线程执行
      * @return {Promise<Object>}
      */
-    invoke(api, params = {}, viewIds = null) {
+    invoke(api, params = [], viewIds = null, isSync = true, isOnMainThread = false) {
         assert.string(api, '`api` must be a string')
 
         return new Promise((resolve, reject) => {
@@ -46,6 +48,8 @@ class Bridge {
                     JSON.stringify(params),
                     callbackId,
                     viewIds,
+                    isSync,
+                    isOnMainThread,
                 )
             } else {
                 // Service JS 调用 Native API
@@ -53,6 +57,8 @@ class Bridge {
                     api,
                     JSON.stringify(params),
                     callbackId,
+                    isSync,
+                    isOnMainThread,
                 )
             }
         })

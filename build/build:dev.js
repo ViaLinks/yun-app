@@ -3,7 +3,7 @@ const app = require('../app.json')
 
 // Build service and view
 run('npm run buildService:dev')
-run('npm run buildView:dev')
+run('npm run buildPages:dev')
 // Copy 'app.json'
 run(`cp ./app.json ./dist/`)
 // Zip all 

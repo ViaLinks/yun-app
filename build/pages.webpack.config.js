@@ -1,16 +1,23 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const app = require('../app.json')
 
 const rootDir = path.join(__dirname, '..')
 const srcDir = path.join(rootDir, 'src')
-const distDir = path.join(rootDir, 'dist')
+const distDir = path.join(rootDir, 'dist', 'pages')
 
 module.exports = {
-    entry: path.join(srcDir, 'service', 'index.js'),
+    mode: 'production',
+    entry: {
+        index: path.join(srcDir, 'pages', 'index.js'),
+        'toast': path.join(srcDir, 'pages', 'toast.js'),
+    },
     output: {
-        filename: 'service.js',
+        filename: '[name].js',
         path: distDir,
     },
+    devtool: 'source-map',
+
     module: {
         rules: [
             {
@@ -40,22 +47,20 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: './src/service/index.html',
-            inject: true,
-            filename: 'service.html',
+            template: './src/pages/index.html',
+            filename: 'index.html',
+            inject: false,
+        }),
+        new HtmlWebpackPlugin({
+            template: './src/pages/toast.html',
+            filename: 'toast.html',
+            inject: false,
         }),
     ],
     resolve: {
+        extensions: ['.js', '.json'],
         alias: {
             '@': srcDir,
         }
-    },
-
-    devtool: 'source-map',
-    devServer: {
-        contentBase: path.join(__dirname, 'build'),
-        clientLogLevel: 'warning',
-        compress: true,
-        open: true,
     },
 }
